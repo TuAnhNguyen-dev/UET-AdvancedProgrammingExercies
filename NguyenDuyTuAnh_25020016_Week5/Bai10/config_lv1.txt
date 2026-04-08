@@ -1,0 +1,4 @@
+username=admin
+password=super_secret
+timeout=5000
+maxConnections=10

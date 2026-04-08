@@ -1,0 +1,4 @@
+username=db_user
+timeout=10000
+database_url=jdbc:mysql://localhost:3306/uet_library?useSSL=false&serverTimezone=UTC
+encryption_key=base64=XYZ123==

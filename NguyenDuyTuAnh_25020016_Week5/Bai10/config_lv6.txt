@@ -1,0 +1,3 @@
+username=tester
+timeout=5000
+maxConnections=0

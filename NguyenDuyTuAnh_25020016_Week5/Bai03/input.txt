@@ -1,0 +1,5 @@
+Java is a powerful programming language. Java allows developers to write code once and run it anywhere. Many developers love Java because Java has a huge community. However, Python is also popular. Python is known for its simplicity and Python is used in Data Science.
+
+Programming requires logic and patience. When you start programming, you might feel confused. But do not worry! Every programmer was once a beginner. Computers are fast, but computers are also "dumb" because they only do what we tell them to do.
+
+In the world of technology, things change rapidly. Modern technology is everywhere: in our pockets, in our cars, and in our homes. We use technology to communicate, to work, and to learn. Learning to code is a great way to understand this modern world. Is it hard? Maybe. Is it worth it? Definitely!
