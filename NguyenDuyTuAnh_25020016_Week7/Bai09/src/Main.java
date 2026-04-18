@@ -16,7 +16,7 @@ public class Main {
             threads[i] = new Thread(() -> {
                 System.out.println("Thread " + threadId + " started");
                 for (int j = 0; j < INCREMENTS_PER_THREAD; j++) {
-                    counter.increment();
+                    counter.increment() ;
                 }
                 System.out.println("Thread " + threadId + " completed");
             });

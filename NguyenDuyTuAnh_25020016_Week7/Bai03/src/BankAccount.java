@@ -10,10 +10,10 @@ public class BankAccount {
     }
 
     public synchronized void withdraw(int amount) {
-        if (balance < amount) {
-            System.out.println("Error: Insufficient funds. Withdrawal failed.");
-            return;
-        }
+//        if (balance < amount) {
+//            System.out.println("Error: Insufficient funds. Withdrawal failed.");
+//            return;
+//        }
 
         balance -= amount;
     }
