@@ -1,20 +1,65 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class Vehicle {
-    static final int CAR = 0;
-    static final int BIKE = 1;
-    static final int TRUCK = 2;
-
+abstract class Vehicle {
     private final String plate;
-    private final int type;
 
-    public Vehicle(String plate, int type) {
+    public Vehicle(String plate) {
         this.plate = plate;
-        this.type = type;
     }
     public String getPlate() { return plate; }
-    public int getType() { return type; }
+
+    abstract public double getFee(int hours);
+
+    public int getBonusPoints(int hours) {
+        return 1;
+    }
+}
+
+class Car extends Vehicle {
+    public Car(String plate) {
+        super(plate);
+    }
+
+    @Override
+    public double getFee(int hours) {
+        double fee = 10;
+        if (hours > 2) {
+            fee += (hours - 2) * 3;
+        }
+        return fee;
+    }
+}
+
+class Bike extends Vehicle {
+    public Bike(String plate) {
+        super(plate);
+    }
+
+    @Override
+    public double getFee(int hours) {
+        double fee = 5;
+        if (hours > 3) {
+            fee += (hours - 3) * 2;
+        }
+        return fee;
+    }
+}
+
+class Truck extends Vehicle {
+    public Truck(String plate) {
+        super(plate);
+    }
+
+    @Override
+    public double getFee(int hours) {
+        return 15 + hours * 4;
+    }
+
+    @Override
+    public int getBonusPoints(int hours) {
+        return (hours > 5) ? 2 : 1;
+    }
 }
 
 class ParkingTicket {
@@ -27,6 +72,14 @@ class ParkingTicket {
     }
     public Vehicle getVehicle() { return vehicle; }
     public int getHours() { return hours; }
+
+    public double getFee() {
+        return vehicle.getFee(hours);
+    }
+
+    public int getBonusPoints() {
+        return vehicle.getBonusPoints(hours);
+    }
 }
 
 class ParkingCustomer {
@@ -40,47 +93,33 @@ class ParkingCustomer {
         tickets.add(ticket);
     }
 
-    public String receipt() {
+    public double getAllFee() {
         double totalFee = 0;
-        int bonusPoints = 0;
-        String result = "Parking Receipt for " + name + "\n";
-
         for (ParkingTicket each : tickets) {
-            double thisFee = 0;
-
-            // calculate fee per ticket
-            switch (each.getVehicle().getType()) {
-                case Vehicle.CAR:
-                    thisFee += 10;
-                    if (each.getHours() > 2) {
-                        thisFee += (each.getHours() - 2) * 3;
-                    }
-                    break;
-                case Vehicle.BIKE:
-                    thisFee += 5;
-                    if (each.getHours() > 3) {
-                        thisFee += (each.getHours() - 3) * 2;
-                    }
-                    break;
-                case Vehicle.TRUCK:
-                    thisFee += 15 + each.getHours() * 4;
-                    break;
-            }
-
-            totalFee += thisFee;
-
-            // bonus points
-            bonusPoints++;
-            if (each.getVehicle().getType() == Vehicle.TRUCK && each.getHours() > 5) {
-                bonusPoints++;
-            }
-
-            result += "\t" + each.getVehicle().getPlate() + "\t" + thisFee + "\n";
+            totalFee += each.getFee();
         }
 
-        result += "Total fee is " + totalFee + "\n";
-        result += "You earned " + bonusPoints + " bonus points";
-        return result;
+        return totalFee;
+    }
+
+    public int getBonusPoints() {
+        int bonusPoints = 0;
+        for (ParkingTicket each : tickets) {
+            bonusPoints += each.getBonusPoints();
+        }
+        return bonusPoints;
+    }
+
+    public String receipt() {
+        StringBuilder result = new StringBuilder("Parking Receipt for " + name + "\n");
+
+        for (ParkingTicket each : tickets) {
+            result.append("\t").append(each.getVehicle().getPlate()).append("\t").append(each.getFee()).append("\n");
+        }
+
+        result.append("Total fee is ").append(getAllFee()).append("\n");
+        result.append("You earned ").append(getBonusPoints()).append(" bonus points");
+        return result.toString();
     }
 }
 
@@ -88,18 +127,15 @@ class ParkingCustomer {
 
 public class Main {
     public static void main(String[] args) {
-        Vehicle car1 = new Vehicle("29A-12345", Vehicle.CAR);
-        Vehicle bike1 = new Vehicle("30B-54321", Vehicle.BIKE);
-        Vehicle truck1 = new Vehicle("31C-67890", Vehicle.TRUCK);
-
-        ParkingTicket ticket1 = new ParkingTicket(car1, 4);
-        ParkingTicket ticket2 = new ParkingTicket(bike1, 5);
-        ParkingTicket ticket3 = new ParkingTicket(truck1, 6);
-
         ParkingCustomer customer = new ParkingCustomer("John Doe");
-        customer.addTicket(ticket1);
-        customer.addTicket(ticket2);
-        customer.addTicket(ticket3);
+
+        Car car1 = new Car("29A-12345");
+        Bike bike1 = new Bike("30B-54321");
+        Truck truck1 = new Truck("31C-67890");
+
+        customer.addTicket(new ParkingTicket(car1, 4));
+        customer.addTicket(new ParkingTicket(bike1, 5));
+        customer.addTicket(new ParkingTicket(truck1, 6));
 
         System.out.println(customer.receipt());
     }
